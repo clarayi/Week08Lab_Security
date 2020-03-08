@@ -33,18 +33,23 @@ public class AdminFilter implements Filter
         // this code will execute before HomeServlet and UsersServlet
         HttpServletRequest r = (HttpServletRequest)request;
         HttpSession session = r.getSession();
+        HttpServletResponse resp = (HttpServletResponse)response;
         
-        if (session.getAttribute("username") != null) 
+        if(session.getAttribute("username") != null) 
         {
-            // if they are authenticated, i.e. have a username in the session,
-            // then allow them to continue on to the servlet
-            chain.doFilter(request, response);
+            String username = (String)session.getAttribute("username");
+            
+            if(username.contains("admin"))
+            {
+                chain.doFilter(request, response);
+            }
+            else
+            {
+                resp.sendRedirect("home");
+            }
         } 
         else 
         {
-            // they do not have a username in the sesion
-            // so, send them to login page
-            HttpServletResponse resp = (HttpServletResponse)response;
             resp.sendRedirect("login");
         }
 

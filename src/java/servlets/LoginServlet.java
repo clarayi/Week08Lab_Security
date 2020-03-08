@@ -6,7 +6,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +17,11 @@ import services.AccountService;
  *
  * @author awarsyle
  */
-public class LoginServlet extends HttpServlet {
-
+public class LoginServlet extends HttpServlet 
+{
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
         // more secure, logout if seeing login page
         HttpSession session = request.getSession();
         session.invalidate();
@@ -32,20 +31,30 @@ public class LoginServlet extends HttpServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
         
         AccountService ac = new AccountService();
-        if (ac.login(username, password) != null) {
+        if (ac.login(username, password) != null) 
+        {
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
-            response.sendRedirect("users");
-        } else {
+            
+            if(username.contains("admin"))
+            {
+                response.sendRedirect("users");
+            }
+            else
+            {
+                response.sendRedirect("home");
+            }
+        } 
+        else 
+        {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
     }
-
 }

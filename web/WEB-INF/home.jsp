@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Home Page</h1>
+        <p>Logged in as: ${username}</p>
         <a href="login">Logout</a>
     </body>
 </html>

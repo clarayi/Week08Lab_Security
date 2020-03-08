@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import services.UserService;
 import models.User;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,24 +13,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import viewmodels.UserViewModel;
 
-public class UserServlet extends HttpServlet {
-
+public class UserServlet extends HttpServlet 
+{
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        
-        
-
-        
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
         UserService us = new UserService();
         String action = request.getParameter("action");
-        if (action != null && action.equals("view")) {
+        
+        if (action != null && action.equals("view")) 
+        {
             String selectedUsername = request.getParameter("selectedUsername");
-            try {
+            try 
+            {
                 User user = us.get(selectedUsername);
                 boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-                if (ajax) {
+                if (ajax) 
+                {
                     Gson gson = new Gson();
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
@@ -42,25 +40,30 @@ public class UserServlet extends HttpServlet {
                 }
                 
                 request.setAttribute("selectedUser", user);
-            } catch (Exception ex) {
+            } 
+            catch (Exception ex) 
+            {
                 Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
         List<User> users = null;        
-        try {
+        try 
+        {
             users = us.getAll(); 
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         request.setAttribute("users", users);
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
         String action = request.getParameter("action");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -70,26 +73,36 @@ public class UserServlet extends HttpServlet {
 
         UserService us = new UserService();
 
-        try {
-            if (action.equals("delete")) {
+        try 
+        {
+            if (action.equals("delete")) 
+            {
                 String selectedUsername = request.getParameter("selectedUsername");
                 us.delete(selectedUsername);
-            } else if (action.equals("edit")) {
+            } 
+            else if (action.equals("edit")) 
+            {
                 us.update(username, password, firstname, lastname, email);
-            } else if (action.equals("add")) {
+            } 
+            else if (action.equals("add")) 
+            {
                 us.insert(username, password, firstname, lastname, email);
             }
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             request.setAttribute("errorMessage", "Whoops.  Could not perform that action.");
         }
         
         List<User> users = null;
-        try {
+        try 
+        {
             users = us.getAll();
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         
         request.setAttribute("users", users);
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);

@@ -12,17 +12,23 @@ import models.User;
  *
  * @author awarsyle
  */
-public class AccountService {
+public class AccountService 
+{
 
-    public User login(String username, String password) {
-        try {
+    public User login(String username, String password) 
+    {
+        try 
+        {
             UserDB userDB = new UserDB();
             User user = userDB.getUser(username);
 
-            if (user.getPassword().equals(password)) {
+            if (user.getPassword().equals(password)) 
+            {
                 return user;
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
 
         }
 
